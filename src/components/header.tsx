@@ -56,6 +56,14 @@ export function Header({ onCartOpen, cartCount = 0, wishlistCount = 0 }: HeaderP
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/plus"
+            className="hidden lg:inline-flex items-center gap-1.5 text-[12px] font-medium text-pink-500 hover:text-pink-600 transition-colors"
+          >
+            <span className="text-[10px] border border-pink-400 text-pink-500 px-1 py-0.5 rounded-sm leading-none">
+              PLUS
+            </span>
+          </Link>
           <button
             aria-label="Search"
             className="p-1 hover:opacity-60 transition-opacity"
@@ -122,6 +130,13 @@ export function Header({ onCartOpen, cartCount = 0, wishlistCount = 0 }: HeaderP
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/plus"
+            className="block text-sm py-2 text-pink-500 font-medium"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Plus
+          </Link>
         </div>
       </div>
 
