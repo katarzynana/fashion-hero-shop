@@ -46,7 +46,10 @@ export function ProductCard({ product, className, sponsored }: ProductCardProps)
         <Link href={`/products/${product.slug}`} className="block">
           {/* Image area */}
           <div
-            className="relative aspect-square overflow-hidden mb-3"
+            className={cn(
+              "relative aspect-square overflow-hidden mb-3",
+              sponsored && "ring-2 ring-charcoal/30"
+            )}
             style={{ background: productGradient(firstColor.hex) }}
           >
             {badgeLabel && (

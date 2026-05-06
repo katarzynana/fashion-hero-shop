@@ -12,6 +12,7 @@ import { getSellerById } from "@/data/sellers";
 
 interface ProductInfoProps {
   product: Product;
+  sponsored?: boolean;
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
@@ -55,7 +56,7 @@ function getEstimatedDelivery(): string {
   return `${fmt.format(startDate)} - ${fmt.format(endDate)}`;
 }
 
-export function ProductInfo({ product }: ProductInfoProps) {
+export function ProductInfo({ product, sponsored }: ProductInfoProps) {
   const [selectedColor, setSelectedColor] = useState<ProductColor>(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const { addItem } = useCart();
@@ -106,17 +107,24 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </div>
         <StarRating rating={product.rating} count={product.reviewCount} />
         {seller && (
-          <Link
-            href={`/collections/all?seller=${seller.slug}`}
-            className="text-[12px] text-warm-gray hover:text-charcoal transition-colors mt-1 inline-block"
-          >
-            Sold by <span className="underline">{seller.name}</span>
-            {seller.rating >= 4.5 && (
-              <span className="inline-block ml-1 text-[9px] bg-charcoal/10 text-charcoal/70 px-1 py-0.5 rounded uppercase tracking-wide no-underline">
-                Pro
+          <div className="flex items-center gap-2 flex-wrap mt-1">
+            <Link
+              href={`/collections/all?seller=${seller.slug}`}
+              className="text-[12px] text-warm-gray hover:text-charcoal transition-colors inline-block"
+            >
+              Sold by <span className="underline">{seller.name}</span>
+              {seller.rating >= 4.5 && (
+                <span className="inline-block ml-1 text-[9px] bg-charcoal/10 text-charcoal/70 px-1 py-0.5 rounded uppercase tracking-wide no-underline">
+                  Pro
+                </span>
+              )}
+            </Link>
+            {sponsored && (
+              <span className="text-[9px] font-normal text-warm-gray/60 border border-warm-gray/20 px-1.5 py-0.5 tracking-wide">
+                Sponsored
               </span>
             )}
-          </Link>
+          </div>
         )}
       </div>
 
