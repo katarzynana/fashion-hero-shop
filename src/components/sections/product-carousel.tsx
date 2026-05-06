@@ -2,8 +2,36 @@
 
 import { useState, useRef } from "react";
 import { products } from "@/data/products";
+import { getPromotedProducts, isPromoted } from "@/data/promotions";
 import { ProductCard } from "@/components/product-card";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
+import type { Product } from "@/types";
+
+interface CardEntry {
+  product: Product;
+  sponsored: boolean;
+}
+
+// Interleave promoted cards into an organic feed at every SLOT_INTERVAL position
+const SLOT_INTERVAL = 4;
+
+function buildFeed(organic: Product[], promoted: Product[]): CardEntry[] {
+  const promotedQueue = promoted.filter(
+    (p) => !organic.some((o) => o.id === p.id)
+  );
+  const feed: CardEntry[] = [];
+  let promoIndex = 0;
+
+  for (let i = 0; i < organic.length; i++) {
+    // Insert a promoted card before every SLOT_INTERVAL-th organic card
+    if (i > 0 && i % SLOT_INTERVAL === 0 && promoIndex < promotedQueue.length) {
+      feed.push({ product: promotedQueue[promoIndex++], sponsored: true });
+    }
+    feed.push({ product: organic[i], sponsored: isPromoted(organic[i].id) });
+  }
+
+  return feed;
+}
 
 type Tab = "new-arrivals" | "best-sellers";
 
@@ -16,7 +44,9 @@ export function ProductCarousel() {
   const [activeTab, setActiveTab] = useState<Tab>("new-arrivals");
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const filtered = products.filter((p) => p.collections.includes(activeTab));
+  const organic = products.filter((p) => p.collections.includes(activeTab));
+  const promoted = getPromotedProducts();
+  const feed = buildFeed(organic, promoted);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -65,10 +95,11 @@ export function ProductCarousel() {
           ref={scrollRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-2"
         >
-          {filtered.map((product) => (
+          {feed.map(({ product, sponsored }) => (
             <ProductCard
-              key={product.id}
+              key={`${sponsored ? "sp" : "org"}-${product.id}`}
               product={product}
+              sponsored={sponsored}
               className="min-w-[220px] max-w-[220px] flex-shrink-0"
             />
           ))}
