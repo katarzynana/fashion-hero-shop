@@ -30,6 +30,14 @@ const footerSections = [
       { label: "Press", href: "#" },
     ],
   },
+  {
+    title: "SELLER",
+    links: [
+      { label: "Sell on FashionHero", href: "/seller" },
+      { label: "Seller login", href: "/seller/login" },
+      { label: "Promoted Program", href: "/promoted" },
+    ],
+  },
 ];
 
 const socialLinks = [
@@ -61,7 +69,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Email signup — more prominent */}
           <div>
             <h3 className="text-[12px] font-medium uppercase tracking-[0.8px] text-white/50 mb-4">
