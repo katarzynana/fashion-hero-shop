@@ -11,6 +11,7 @@ import { getSellerById } from "@/data/sellers";
 interface ProductCardProps {
   product: Product;
   className?: string;
+  sponsored?: boolean;
 }
 
 /* Each product gets a unique gradient based on its first color hex */
@@ -22,7 +23,7 @@ function hasRealImage(src: string): boolean {
   return src.startsWith("/images/");
 }
 
-export function ProductCard({ product, className }: ProductCardProps) {
+export function ProductCard({ product, className, sponsored }: ProductCardProps) {
   const firstColor = product.colors[0];
   const { openQuickView } = useQuickView();
   const seller = getSellerById(product.sellerId);
@@ -45,7 +46,10 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <Link href={`/products/${product.slug}`} className="block">
           {/* Image area */}
           <div
-            className="relative aspect-square overflow-hidden mb-3"
+            className={cn(
+              "relative aspect-square overflow-hidden mb-3",
+              sponsored && "ring-2 ring-charcoal/30"
+            )}
             style={{ background: productGradient(firstColor.hex) }}
           >
             {badgeLabel && (
@@ -95,6 +99,12 @@ export function ProductCard({ product, className }: ProductCardProps) {
             >
               QUICK VIEW
             </button>
+
+            {sponsored && (
+              <span className="absolute bottom-3 right-3 text-[9px] font-normal text-warm-gray/70 bg-white/80 px-1.5 py-0.5 z-10 tracking-wide">
+                Sponsored
+              </span>
+            )}
           </div>
         </Link>
 

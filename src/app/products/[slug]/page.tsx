@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { products, getProduct, getRelatedProducts } from "@/data/products";
+import { isPromoted } from "@/data/promotions";
 import { ImageGallery } from "@/components/image-gallery";
 import { ProductInfo } from "@/components/product-info";
 import { ProductDetailsAccordion } from "@/components/product-details-accordion";
@@ -38,6 +39,7 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   const related = getRelatedProducts(product);
+  const sponsored = isPromoted(product.id);
 
   return (
     <main className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10">
@@ -49,7 +51,7 @@ export default async function ProductPage({ params }: PageProps) {
           colorName={product.colors[0]?.name}
           colorHex={product.colors[0]?.hex}
         />
-        <ProductInfo product={product} />
+        <ProductInfo product={product} sponsored={sponsored} />
       </div>
 
       {/* Accordion details */}
